@@ -2,6 +2,8 @@ package splitandmerger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,11 +11,12 @@ import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 
+
 /**
  * Tool that can be used to concatenate existing PDF files.
  * @since 2.1.1 (renamed to follow Java naming conventions)
  */
-public class ConcatPdf {
+public class ConcatPdfCreationDateSorting {
     
     /**
      * This class can be used to concatenate existing PDF files.
@@ -50,8 +53,20 @@ public class ConcatPdf {
         
     }
 
+    private static Comparator<File> creationDateComparator = new Comparator<File>() {
+
+		@Override
+		public int compare(File f1, File f2) {
+			return (int) (f1.lastModified() - f2.lastModified() );
+		}
+    	
+    };
+    
 	private static void collectFiles(File dir, List<File> pdfFiles) {
-		for(File f : dir.listFiles() ) {
+		
+		File [] files = dir.listFiles();
+		Arrays.sort( files, creationDateComparator );
+		for(File f : files ) {
 			if(f.isDirectory() )
 				collectFiles(f, pdfFiles);
 			else if( f.getName().endsWith(".pdf"))

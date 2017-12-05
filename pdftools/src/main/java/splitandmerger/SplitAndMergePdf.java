@@ -1,31 +1,28 @@
 package splitandmerger;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfImportedPage;
-import com.lowagie.text.pdf.PdfReader;
-import com.lowagie.text.pdf.PdfWriter;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.apache.pdfbox.multipdf.Splitter;
+import org.apache.pdfbox.pdmodel.PDDocument;
+
 
 public class SplitAndMergePdf {
 
 	private File directory;
 	private File correctedPdf;
 
-	private int i = 0;
-	private PdfReader reader;
+	private Iterator<PDDocument> it;
 
 	public SplitAndMergePdf(File dir, File correctedPdf) {
 		this.directory = dir;
 		this.correctedPdf = correctedPdf;
 	}
 
-	public static void main(String[] args) throws IOException, DocumentException {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		if (args.length != 2) {
 			System.err.println("Arguments: file-with-corrections  folder-with-students-solutions");
@@ -52,19 +49,26 @@ public class SplitAndMergePdf {
 		System.out.println("Finished!");
 	}
 
-	public void splitAndMerge() throws IOException, DocumentException {
+	public void splitAndMerge() throws IOException {
 
-		reader = new PdfReader(correctedPdf.getAbsolutePath());
-		int n = reader.getNumberOfPages();
+		PDDocument document = PDDocument.load(correctedPdf);
+		int n = document.getNumberOfPages();
 
 		System.out.println("n = " + n);
 
-		if (n != countPagesInDir(directory)) {
-			System.err.println("Page numbers are not the same!");
-			//System.exit(1);
+		int l = countPagesInDir(directory);
+		if (n != l ) {
+			System.err.println("Page number " + l + " is not the same!");
+			System.exit(1);
 		}
+		
+		Splitter splitter = new Splitter();
+		List<PDDocument> documents = splitter.split(document);
+		it = documents.iterator();
 
 		processDir(directory);
+		
+		document.close();
 	}
 
 	private int countPagesInDir(File dir) throws IOException {
@@ -79,66 +83,40 @@ public class SplitAndMergePdf {
 	}
 
 	private int countPagesInFile(File f) throws IOException {
-		System.out.println(f.getName());
-		PdfReader reader = new PdfReader(f.getAbsolutePath());
-		int n = reader.getNumberOfPages();
-		reader.close();
+		PDDocument document = PDDocument.load(f);
+		int n = document.getNumberOfPages();
+		document.close();
+		System.out.println("There are " + n + " pages in file " + f);
 		return n;
 	}
 
-	private void processDir(File dir) throws IOException, DocumentException {
-		for (File f : dir.listFiles()) {
-			if (f.isDirectory())
+	
+	private void processDir(File dir) throws IOException {
+		for (File f :  dir.listFiles()) {
+			if (f.isDirectory()) {
 				processDir(f);
+			}
 			else if (f.getName().endsWith(".pdf"))
 				processFile(f);
 		}
 	}
 
-	private void processFile(File f) throws IOException, DocumentException {
+	private void processFile(File f) throws IOException {
 		System.out.println("Processing file " + f);
-
 		
-			PdfReader currentReader = new PdfReader(f.getAbsolutePath());
-			int n = currentReader.getNumberOfPages();
-			currentReader.close();
+		int n = countPagesInFile(f);
+		File newFile = new File( f.getAbsolutePath().substring(0, f.getAbsolutePath().length() - 4) + "corrected.pdf" );
+		PDFMergerUtility pdfMerger = new PDFMergerUtility(); 
 		
-
-		Document document = new Document(reader.getPageSizeWithRotation(i+1));
-		String filename = f.getAbsolutePath().substring(0, f.getAbsolutePath().length() - 4) + "_corrected.pdf";
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
-
-		document.open();
-		PdfContentByte cb = writer.getDirectContent();
-
-		PdfImportedPage page;
-		int rotation;
-
+		PDDocument document = new PDDocument();
 		int j = 0;
-		while (j < n) {
+		while (j < n ) {
+			pdfMerger.appendDocument(document, it.next() );
 			++j;
-			++i;
-			System.out.println(i);
-			document.setPageSize(reader.getPageSizeWithRotation(i));
-			document.newPage();
-			page = writer.getImportedPage(reader, i);
-			rotation = reader.getPageRotation(i);
-			rotation = reader.getPageRotation(i);
-			System.out.println("Rotation = "+ rotation);
-			rotation = reader.getPageRotation(i);
-			double rot = rotation * Math.PI / 180;
-			rot = rot + Math.PI;
-			Rectangle rect = reader.getPageSizeWithRotation(i);
-			System.out.println(rect +" "+ rect.getHeight() );
-			if (rotation == 90 || rotation == 270) {
-				cb.addTemplate(page, (float) Math.cos(rot), (float) Math.sin(rot), (float)-Math.sin(rot), (float) Math.cos(rot), 0, reader.getPageSizeWithRotation(i).getWidth());
-			}
-			else {
-				cb.addTemplate(page, 1f, 0, 0, 1f, 0, 0);
-			}
 		}
-
-		document.close();
+		
+		document.save(newFile);
+		document.close();	
 	}
 
 }

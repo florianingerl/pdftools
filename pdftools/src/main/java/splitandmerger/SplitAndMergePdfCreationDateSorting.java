@@ -2,6 +2,8 @@ package splitandmerger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,14 +12,14 @@ import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 
-public class SplitAndMergePdf2 {
+public class SplitAndMergePdfCreationDateSorting {
 
 	private File directory;
 	private File correctedPdf;
 
 	private Iterator<PDDocument> it;
 
-	public SplitAndMergePdf2(File dir, File correctedPdf) {
+	public SplitAndMergePdfCreationDateSorting(File dir, File correctedPdf) {
 		this.directory = dir;
 		this.correctedPdf = correctedPdf;
 	}
@@ -43,7 +45,7 @@ public class SplitAndMergePdf2 {
 			System.exit(1);
 		}
 
-		SplitAndMergePdf2 sampdf = new SplitAndMergePdf2(dir, correctedPdf);
+		SplitAndMergePdfCreationDateSorting sampdf = new SplitAndMergePdfCreationDateSorting(dir, correctedPdf);
 		sampdf.splitAndMerge();
 
 		System.out.println("Finished!");
@@ -56,9 +58,10 @@ public class SplitAndMergePdf2 {
 
 		System.out.println("n = " + n);
 
-		if (n != countPagesInDir(directory)) {
-			System.err.println("Page numbers are not the same!");
-			//System.exit(1);
+		int l = countPagesInDir(directory);
+		if (n != l ) {
+			System.err.println("Page number " + l + " is not the same!");
+			System.exit(1);
 		}
 		
 		Splitter splitter = new Splitter();
@@ -69,10 +72,21 @@ public class SplitAndMergePdf2 {
 		
 		document.close();
 	}
+	
+	private static Comparator<File> creationDateComparator = new Comparator<File>() {
+
+		@Override
+		public int compare(File f1, File f2) {
+			return (int) (f1.lastModified() - f2.lastModified() );
+		}
+    	
+    };
 
 	private int countPagesInDir(File dir) throws IOException {
 		int n = 0;
-		for (File f : dir.listFiles()) {
+		File [] files = dir.listFiles();
+		Arrays.sort( files, creationDateComparator );
+		for (File f : files ) {
 			if (f.isDirectory())
 				n += countPagesInDir(f);
 			else if (f.getName().endsWith(".pdf"))
@@ -85,13 +99,18 @@ public class SplitAndMergePdf2 {
 		PDDocument document = PDDocument.load(f);
 		int n = document.getNumberOfPages();
 		document.close();
+		System.out.println("There are " + n + " pages in file " + f);
 		return n;
 	}
 
+	
 	private void processDir(File dir) throws IOException {
-		for (File f : dir.listFiles()) {
-			if (f.isDirectory())
+		File [] files = dir.listFiles();
+		Arrays.sort( files, creationDateComparator );
+		for (File f :  files ) {
+			if (f.isDirectory()) {
 				processDir(f);
+			}
 			else if (f.getName().endsWith(".pdf"))
 				processFile(f);
 		}
@@ -112,7 +131,7 @@ public class SplitAndMergePdf2 {
 		}
 		
 		document.save(newFile);
-			
+		document.close();	
 	}
 
 }
