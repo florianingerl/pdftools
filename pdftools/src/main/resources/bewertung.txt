@@ -1,0 +1,17 @@
+= Bitte nur Bewertung und Kommentare ändern =
+=============================================
+========== UniWorx Bewertungsdatei ==========
+======= diese Datei ist UTF8 encodiert ======
+Informationen zum Übungsblatt:
+Veranstaltung: [MATH] Lineare Algebra I
+Blatt:
+Korrektor: Florian Ingerl
+E-Mail: Florian.Ingerl@lmu.de
+Abgabe-Id: 
+Maximalpunktzahl: 20 Punkte
+=============================================
+Bewertung: 
+=============================================
+Kommentare:
+
+============ Ende der Kommentare ============

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.florianingerl.pdf</groupId>
@@ -6,7 +7,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -19,6 +20,12 @@
 			<version>2.0.8</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.github.florianingerl.util</groupId>
+			<artifactId>regex</artifactId>
+			<version>1.1.6</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -27,7 +34,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 
 				<executions>
-					
+
 
 					<execution>
 						<id>make-assembly-splitandmergepdf</id> <!-- this is used for inheritance merges -->
@@ -47,7 +54,7 @@
 							</descriptorRefs>
 						</configuration>
 					</execution>
-					
+
 					<execution>
 						<id>make-assembly-splitandmergepdfcreationDateSorting</id> <!-- this is used for inheritance merges -->
 						<phase>package</phase> <!-- bind to the packaging phase -->
@@ -85,7 +92,7 @@
 							</descriptorRefs>
 						</configuration>
 					</execution>
-					
+
 					<execution>
 						<id>make-assembly-concatpdf-creationDateSorting</id> <!-- this is used for inheritance merges -->
 						<phase>package</phase> <!-- bind to the packaging phase -->
@@ -104,7 +111,7 @@
 							</descriptorRefs>
 						</configuration>
 					</execution>
-					
+
 					<execution>
 						<id>make-assembly-evaluater</id> <!-- this is used for inheritance merges -->
 						<phase>package</phase> <!-- bind to the packaging phase -->
@@ -123,7 +130,7 @@
 							</descriptorRefs>
 						</configuration>
 					</execution>
-					
+
 					<execution>
 						<id>make-assembly-concaterFirstPagesOnly</id> <!-- this is used for inheritance merges -->
 						<phase>package</phase> <!-- bind to the packaging phase -->
