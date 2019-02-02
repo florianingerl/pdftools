@@ -39,7 +39,7 @@ public class FairEvaluator {
 		String bewertung_vorlage = FileUtils.readFileToString(file);
 		bewertung_vorlage = bewertung_vorlage.replaceAll("Blatt:", "Blatt: Blatt " + sheetnumber);
 		
-		Pattern p = Pattern.compile("^(?<uniworxid>\\d{6})\\s+(?<points>\\d+)$", Pattern.MULTILINE);
+		Pattern p = Pattern.compile("^(?<uniworxid>\\d{6})\\s+(?<points>\\d+(\\.5)?)$", Pattern.MULTILINE);
 		Matcher m = p.matcher(s);
 		
 		while(m.find()) {
