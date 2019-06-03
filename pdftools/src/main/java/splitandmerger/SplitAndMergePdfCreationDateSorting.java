@@ -95,7 +95,7 @@ public class SplitAndMergePdfCreationDateSorting {
 		return n;
 	}
 
-	private int countPagesInFile(File f) throws IOException {
+	public static int countPagesInFile(File f) throws IOException {
 		PDDocument document = PDDocument.load(f);
 		int n = document.getNumberOfPages();
 		document.close();

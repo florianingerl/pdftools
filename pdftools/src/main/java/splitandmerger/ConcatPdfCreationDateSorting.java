@@ -25,17 +25,12 @@ public class ConcatPdfCreationDateSorting {
      * @throws IOException 
      * @throws InvalidPasswordException 
      */
-    public static void main(String args[]) throws InvalidPasswordException, IOException {
-        if (args.length < 2) {
-            System.err.println("arguments: directory-with-pdfs-to-concat destFile");
-            System.exit(1);
-        }
-        
-        File dir = new File(args[0]);
+	public static void concatPdfs(String sdir, String destFile) throws InvalidPasswordException, IOException {
+		File dir = new File(sdir);
         List<File> pdfFiles = new LinkedList<File>();
         
         collectFiles(dir, pdfFiles);
-        File outFile = new File(args[1]);
+        File outFile = new File(destFile);
         
         PDFMergerUtility pdfMerger = new PDFMergerUtility();
         PDDocument document = new PDDocument();
@@ -50,10 +45,22 @@ public class ConcatPdfCreationDateSorting {
         document.save(outFile);
         document.close();
         System.out.println("Finished!");
+	}
+	
+	
+    public static void main(String args[]) throws InvalidPasswordException, IOException {
+        if (args.length < 2) {
+            System.err.println("arguments: directory-with-pdfs-to-concat destFile");
+            System.exit(1);
+        }
+        
+        concatPdfs(args[0], args[1]);
+        
+        
         
     }
 
-    private static Comparator<File> creationDateComparator = new Comparator<File>() {
+    public static Comparator<File> creationDateComparator = new Comparator<File>() {
 
 		@Override
 		public int compare(File f1, File f2) {
