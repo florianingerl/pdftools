@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +15,14 @@ import java.nio.file.StandardCopyOption;
 public class FileDownloader {
 
 	public static void download(URL url, Path saveTo) throws IOException {
-		InputStream in = url.openStream();
+		URLConnection conn;
+		try {
+			conn = url.openConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		InputStream in = conn.getInputStream();
 		Files.copy(in, saveTo, StandardCopyOption.REPLACE_EXISTING);
 		in.close();
 	}

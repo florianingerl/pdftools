@@ -8,8 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -40,6 +42,29 @@ import javax.swing.event.HyperlinkListener;
 
 public class Main extends Application {
 
+	public static void main(String[] args) throws Exception {
+		
+		
+		
+        launch(args);
+    }
+
+    public void start(Stage stage) throws Exception {
+        String fxmlFile = "/fxml/mainframe.fxml";
+       
+        FXMLLoader loader = new FXMLLoader();
+        Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
+
+   
+        Scene scene = new Scene(rootNode, 500, 500);
+        //scene.getStylesheets().add("/styles/styles.css");
+
+        stage.setTitle("PDF-Downloader");
+        stage.setScene(scene);
+        stage.show();
+    }
+	
+	/*
 	public static final String INITIAL_URL = "https://www.portal.uni-muenchen.de/intranet/mzl_staatsexamen_online/sammlung_aufgaben/ews/psychologie/gymnasium/index.html";
 	
 	@Override
@@ -173,7 +198,7 @@ public class Main extends Application {
 		});
     	
         Application.launch(args);
-    }
+    }*/
 
 
 }

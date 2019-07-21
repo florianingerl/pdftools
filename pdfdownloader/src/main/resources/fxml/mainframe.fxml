@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.florianingerl.uni.pdfdownloader.MainFrameController">
+   <children>
+      <VBox layoutX="22.0" layoutY="28.0" spacing="10.0" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="22.0">
+         <children>
+            <HBox layoutX="59.0" layoutY="28.0" spacing="10.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0">
+               <children>
+                  <Label alignment="CENTER" minWidth="-Infinity" prefHeight="27.0" prefWidth="35.0" text="Url:" />
+                  <TextField id="textFieldUrl" fx:id="fieldUrl" layoutX="70.0" layoutY="28.0" prefHeight="39.0" prefWidth="629.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnLoad" onAction="#btnLoadClicked" layoutX="723.0" layoutY="28.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="39.0" prefWidth="70.0" text="Load" AnchorPane.rightAnchor="14.0" />
+               </children>
+            </HBox>
+            <WebView fx:id="webView" layoutX="22.0" layoutY="83.0" prefHeight="456.0" prefWidth="756.0" VBox.vgrow="ALWAYS" />
+            <HBox layoutX="35.0" layoutY="550.0" prefHeight="200.0" prefWidth="735.0" spacing="10.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <ListView fx:id="list" layoutX="35.0" layoutY="550.0" prefHeight="200.0" prefWidth="599.0" HBox.hgrow="ALWAYS" />
+                  <VBox layoutX="657.0" layoutY="550.0" minWidth="-Infinity" spacing="10.0">
+                     <children>
+                        <Button fx:id="btnDelete" onAction="#btnDeleteClicked" layoutX="657.0" layoutY="550.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Delete" VBox.vgrow="NEVER" />
+                        <Button fx:id="btnClear" onAction="#btnClearClicked" layoutX="657.0" layoutY="604.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="39.0" prefWidth="76.0" text="Clear" VBox.vgrow="NEVER" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="54.0" prefWidth="756.0">
+               <children>
+                  <Button fx:id="btnDownload" onAction="#btnDownloadClicked" alignment="CENTER" mnemonicParsing="false" prefHeight="39.0" prefWidth="339.0" text="Download" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
