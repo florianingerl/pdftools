@@ -106,7 +106,7 @@ public class Main extends Application {
 			@Override
 			public boolean hyperlinkUpdate(HyperlinkEvent event) {
 				String s = event.getURL().toString();
-				if(s.endsWith(".pdf") && !olLinks.contains(s)) {
+				if( (s.endsWith(".pdf") || HttpResponseHeaderReader.isUrlToPdfFile(s)) && !olLinks.contains(s)) {
 					olLinks.add(s);
 					return true;
 				}
@@ -152,11 +152,22 @@ public class Main extends Application {
     public static void main(String[] args) {
     	
     	Authenticator.setDefault (new Authenticator() {
-		    protected PasswordAuthentication getPasswordAuthentication() {
+    		private String username = null;
+	    	private char[] password = null;
+		    
+	    	protected PasswordAuthentication getPasswordAuthentication() {
+		    	
+		    	
+		    	if(username != null && password != null) {
+		    		return new PasswordAuthentication(username, password);
+		    	}
 		    	LoginDlg loginDlg = new LoginDlg();
 		        Optional<Pair<String, String>> result = loginDlg.showAndWait();
-		    	if( result.isPresent() )
-		    		return new PasswordAuthentication(result.get().getKey(), result.get().getValue().toCharArray());
+		    	if( result.isPresent() ) {
+		    		username = result.get().getKey();
+		    		password = result.get().getValue().toCharArray();
+		    		return new PasswordAuthentication(username, password);
+		    	}
 		        return null;
 		    }
 		});
